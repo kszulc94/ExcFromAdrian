@@ -1,0 +1,15 @@
+.hero-banner-container {
+    width: 300px;
+    height: 500px;
+    background-color: green;
+    overflow: hidden;
+}
+
+.animated-in {
+    background-color: orange;
+    transition: 0.3s;
+}
+.animated-out {
+    background-color: red;
+    transition: 0.3s;
+}
