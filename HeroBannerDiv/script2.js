@@ -9,7 +9,7 @@ window.onload = function () {
 
 const itemNb = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 var mainDiv = document.querySelector(".hero-banner-container");
-var stateBlocked = false;
+var stateUnblocked = true;
 
 function start() {
   // Link buttons
@@ -21,21 +21,22 @@ function start() {
 }
 
 function loadDiv() {
-  if (!stateBlocked) {
-    resetMainDiv(); //Applied optionally to reset/remove div list after button was pressed before and avoid duplicates and main div boundry cross (no overflow setting applied in css)
-    stateBlocked = true;
-    mainDiv.setAttribute("class", "hero-banner-container animated-in"); // 'setAttribute' (unlike classList.add) resets/removes existing classes in element and applies defined ones in the command
-
-    itemNb.forEach((number) => {
-      let childDiv = document.createElement("div");
-      childDiv.textContent = "Item " + number;
-      mainDiv.appendChild(childDiv);
-
-      if (number == itemNb[itemNb.length - 1]) {
-        transitionsHandler();
-      }
-    });
+  if (!stateUnblocked) {
+    return;
   }
+  resetMainDiv(); //Applied optionally to reset/remove div list after button was pressed before and avoid duplicates and main div boundry cross (no overflow setting applied in css)
+  stateUnblocked = true;
+  mainDiv.setAttribute("class", "hero-banner-container animated-in"); // 'setAttribute' (unlike classList.add) resets/removes existing classes in element and applies defined ones in the command
+
+  itemNb.forEach((number) => {
+    let childDiv = document.createElement("div");
+    childDiv.textContent = "Item " + number;
+    mainDiv.appendChild(childDiv);
+
+    if (number == itemNb[itemNb.length - 1]) {
+      transitionsHandler();
+    }
+  });
 }
 
 function transitionsHandler() {
@@ -43,15 +44,15 @@ function transitionsHandler() {
   transitionEl.addEventListener("transitionend", function (e) {
     //First transition handler -> animated-in
     mainDiv.classList.add("animated-out");
-    stateBlocked = true; //Keep state blocked to avoid Start button reaction during transition time
+    stateUnblocked = false; //Keep state blocked to avoid Start button reaction during transition time
     transitionEl.addEventListener("transitionend", function (e) {
       //Second transition handler -> animated-out
       if (e.target.matches(".animated-out")) {
-        stateBlocked = false; // Unblock state to allow entire loadDiv function to be run again
+        stateUnblocked = true; // Unblock state to allow entire loadDiv function to be run again
         return;
       }
     });
-    return; //Returns added just in case - 'transitionend' inspects all transitions and can run multiple commands, need to find more efficient solution
+    return; //Returns added just in case - 'transitionend' inspects all transitions and can run commands multiple times, need to find more efficient solution
   });
 }
 
