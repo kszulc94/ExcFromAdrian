@@ -5,7 +5,7 @@ function Heading() {
   return (
     <div className="heading">
       <Navbar bg="light" expand="lg">
-        <Container>
+        <Container fluid>
           <Navbar.Brand href="#home">
             <img
               src={logo}

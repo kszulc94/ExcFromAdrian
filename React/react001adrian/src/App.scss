@@ -1,0 +1,59 @@
+$marginTenPx: 10px;
+$zeroValue: 0;
+$hundredPercent: 100%;
+
+.main-container {
+  margin-top: $marginTenPx;
+  font-size: 0.9rem;
+}
+.no-border-radius {
+  border-radius: $zeroValue !important;
+}
+.column-margin {
+  margin-bottom: $marginTenPx;
+}
+.price-position {
+  position: absolute;
+  bottom: $zeroValue;
+}
+
+// Mobile first structure (TO BE VERIFIED IF MADE CORRECTLY)
+.img {
+  width: 20%;
+  height: $hundredPercent;
+}
+.card-body {
+  width: 60%;
+  font-size: 0.65rem;
+}
+.image-container {
+  width: 40%;
+}
+.card-custom {
+  flex-direction: row !important;
+}
+
+@media (min-width: 576px) {
+  .img {
+    width: 40%;
+  }
+  .card-body {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .card-custom {
+    flex-direction: column !important;
+  }
+  .img {
+    width: $hundredPercent;
+  }
+  .image-container {
+    width: $hundredPercent;
+  }
+  .card-body {
+    width: $hundredPercent;
+    font-size: 1.0 rem;
+  }
+}
