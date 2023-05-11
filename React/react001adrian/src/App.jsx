@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     getData();
-  });
+  }, []);
 
   return (
     <Container fluid className="main-container">
