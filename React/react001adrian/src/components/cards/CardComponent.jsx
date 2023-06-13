@@ -1,4 +1,6 @@
-import { Card } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./cardComponent.scss";
 function CardComponent(props) {
   return (
     <Card className="card-custom h-100 no-border-radius">
@@ -13,9 +15,25 @@ function CardComponent(props) {
         <Card.Text style={{ paddingBottom: "20px" }}>
           {props.cardItem.teaser_desc}
         </Card.Text>
-        <p className="price-position">
-          {props.cardItem.money.value + " " + props.cardItem.money.currency}
-        </p>
+
+        <Row xs={2} md={2}>
+          <Col className="price-position">
+            <div className="price">
+              {props.cardItem.money.value + " " + props.cardItem.money.currency}
+            </div>
+          </Col>
+          <Col className="price-position details-button">
+            <div className="block">
+              <li id="product-details-btn">
+                <Link to={"product?sku=" + props.cardItem.sku}>
+                  <button className="btn btn-primary btn-sm py-0 px-1 btn-sm-font">
+                    Details
+                  </button>
+                </Link>
+              </li>
+            </div>
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   );
