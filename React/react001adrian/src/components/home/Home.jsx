@@ -15,7 +15,7 @@ function Home() {
       .then((res) => res.json())
       .then((out) => {
         setData(out.elements);
-    })
+      })
       .catch((err) => console.error(err));
   };
 
@@ -24,8 +24,7 @@ function Home() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-
-    <Container  className="main-container">
+    <Container className="main-container">
       <Row xs={1} md={3} lg={4}>
         {data.map((item, key) => (
           <Col className="column-margin" key={key}>
@@ -34,7 +33,6 @@ function Home() {
         ))}
       </Row>
     </Container>
-      
   );
 }
 export default Home;

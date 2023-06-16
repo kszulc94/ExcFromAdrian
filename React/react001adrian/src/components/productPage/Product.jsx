@@ -29,6 +29,7 @@ function Product() {
   return (
     <Container className="main-container main-column">
       <Row xs={1} lg={2}>
+
         <Col className=" center-images">
           <LightBoxHandlerComponent
             boxContent={jsonURL}
@@ -38,6 +39,7 @@ function Product() {
 
           <div></div>
         </Col>
+
         <Col className="detail-col">
           <p id="product-title">{data.title}</p>
           <p id="sku">

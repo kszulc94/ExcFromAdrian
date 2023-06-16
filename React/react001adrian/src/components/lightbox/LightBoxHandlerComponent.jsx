@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal.js";
 import "./lightbox.scss";
-
+import Lightbox from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import "yet-another-react-lightbox/plugins/counter.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/styles.css";
 function LightBoxHandlerComponent(props) {
-  //   States for lightbox
-  const [image, setImage] = useState(null);
-
-  // Image index states
-  const [currIndex, setIndex] = useState(null);
-
-  //   Gallery array
+  // Pictures array
   const [gallery, setGallery] = useState([]);
+
+  // States/parameters for Lightbox library - yet-another-react-lightbox
+
+  const [open, setOpen] = useState(false);
+
+  const thumbnailsRef = React.useRef(null);
+
+  const [currIndex, setIndex] = useState(null);
 
   const getData = () => {
     fetch(props.boxContent)
       .then((res) => res.json())
       .then((out) => {
+        // Store JSON images links to array for an easier manipulation
         const tempGallery = [];
         tempGallery.push(out.main);
         for (let i = 0; i < out.images.length; i++) {
@@ -30,50 +37,9 @@ function LightBoxHandlerComponent(props) {
     getData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handler = (item, index) => {
-    setIndex(index);
-    setImage(item);
-  };
-
   const thumbHandler = (item, index) => {
     setIndex(index);
     replaceImg.src = item;
-  };
-
-  const nextPicture = () => {
-    const galleryLength = gallery.length;
-    if (currIndex + 1 >= galleryLength) {
-      setIndex(0);
-      const mainPicture = gallery[0];
-      setImage(mainPicture);
-      return;
-    }
-
-    const nextPictureIndex = currIndex + 1;
-    const newPicture = gallery.filter((item) => {
-      return gallery.indexOf(item) === nextPictureIndex;
-    });
-    const newItem = newPicture[0];
-    setImage(newItem);
-    setIndex(nextPictureIndex);
-  };
-
-  const previousPicture = () => {
-    const galleryLength = gallery.length;
-    if (currIndex === 0) {
-      setIndex(galleryLength - 1);
-      const newPicture = gallery[galleryLength - 1];
-      setImage(newPicture);
-      return;
-    }
-
-    const previousPictureIndex = currIndex - 1;
-    const newPicture = gallery.filter((item) => {
-      return gallery.indexOf(item) === previousPictureIndex;
-    });
-    const newItem = newPicture[0];
-    setImage(newItem);
-    setIndex(previousPictureIndex);
   };
 
   let thumbnailContainer = document.querySelector(".thumbnail-carousel");
@@ -87,10 +53,29 @@ function LightBoxHandlerComponent(props) {
           id="main-pic"
           className={props.mainPictureStyle}
           src={gallery[0]}
-          onClick={() => replaceImg.src && handler(replaceImg.src, currIndex)}
+          onClick={() => setOpen(true)}
           alt="main-pic"
         />
       </div>
+
+      <>
+        <Lightbox
+          plugins={[Thumbnails, Counter]}
+          thumbnails={{ ref: thumbnailsRef, position: "bottom" }}
+          counter={{ container: { style: { top: 0 } } }}
+          open={open}
+          index={currIndex}
+          close={() => setOpen(false)}
+          slides={gallery?.map((item, index) => ({ src: item }))}
+          on={{
+            click: () => {
+              (thumbnailsRef.current?.visible
+                ? thumbnailsRef.current?.hide
+                : thumbnailsRef.current?.show)?.();
+            },
+          }}
+        />
+      </>
 
       <div className="thumbnail-wrapper">
         <div className="thumbnail-carousel">
@@ -117,6 +102,7 @@ function LightBoxHandlerComponent(props) {
           <div className="thumbnails-content">
             {gallery?.map((item, index) => (
               <img
+                id={"thumbnail" + index}
                 className={props.thumbnailStyle}
                 src={item}
                 onClick={() => thumbHandler(item, index)}
@@ -125,17 +111,6 @@ function LightBoxHandlerComponent(props) {
               />
             ))}
           </div>
-        </div>
-
-        <div>
-          {image && (
-            <Modal
-              clickedImg={image}
-              handelRotationRight={nextPicture}
-              setClickedImg={setImage}
-              handelRotationLeft={previousPicture}
-            />
-          )}
         </div>
       </div>
     </div>
