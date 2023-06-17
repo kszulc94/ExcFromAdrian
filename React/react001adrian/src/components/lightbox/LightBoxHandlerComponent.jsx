@@ -17,18 +17,13 @@ function LightBoxHandlerComponent(props) {
   const thumbnailsRef = React.useRef(null);
 
   const [currIndex, setIndex] = useState(null);
-
   const getData = () => {
     fetch(props.boxContent)
       .then((res) => res.json())
       .then((out) => {
-        // Store JSON images links to array for an easier manipulation
-        const tempGallery = [];
-        tempGallery.push(out.main);
-        for (let i = 0; i < out.images.length; i++) {
-          tempGallery.push(out.images[i]);
-        }
-        setGallery(tempGallery);
+        setGallery(out.images);
+        // Push main picture to the array
+        setGallery((current) => [out.main, ...current]);
       })
       .catch((err) => console.error(err));
   };
