@@ -1,4 +1,8 @@
 React Excercise
+- UPDATE (20.06.2023)
+a) Move gallery array from LightBoxHandlerComponent.jsx to Product.jsx - pass gallery array as a prop to LightBoxHandlerComponent - more universal
+b) Added checking for image loading in LightBoxHandlerComponent - content appears when the main image is loaded
+c) Remove empty div from Product.jsx
 - UPDATE (13.06.2023)
 a) Created Home component (migration from App, including .scss)
 b) Created Product page with products details (new JSON included in .env)

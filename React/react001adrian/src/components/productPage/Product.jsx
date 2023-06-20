@@ -12,12 +12,17 @@ function Product() {
   const jsonURL = process.env.REACT_APP_PRODUCT_DETAILS + sku + ".json";
   // Implement React useState and useEffect to fetch and map data from JSON properly/easily (creating hook to get the data in return section)
   const [data, setData] = useState([]);
+// Gallery array for lightbox handler
+  const [gallery, setGallery] = useState([]);
 
   const getData = () => {
     fetch(jsonURL)
       .then((res) => res.json())
       .then((out) => {
         setData(out);
+        setGallery(out.images);
+        // Push main picture to the array
+        setGallery((current) => [out.main, ...current]);
       })
       .catch((err) => console.error(err));
   };
@@ -29,15 +34,12 @@ function Product() {
   return (
     <Container className="main-container main-column">
       <Row xs={1} lg={2}>
-
         <Col className=" center-images">
           <LightBoxHandlerComponent
-            boxContent={jsonURL}
+            content={gallery}
             mainPictureStyle="product-main-picture"
             thumbnailStyle="product-thumb"
           />
-
-          <div></div>
         </Col>
 
         <Col className="detail-col">

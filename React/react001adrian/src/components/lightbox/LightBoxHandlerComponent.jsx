@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./lightbox.scss";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -7,9 +7,6 @@ import "yet-another-react-lightbox/plugins/counter.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 function LightBoxHandlerComponent(props) {
-  // Pictures array
-  const [gallery, setGallery] = useState([]);
-
   // States/parameters for Lightbox library - yet-another-react-lightbox
 
   const [open, setOpen] = useState(false);
@@ -17,20 +14,9 @@ function LightBoxHandlerComponent(props) {
   const thumbnailsRef = React.useRef(null);
 
   const [currIndex, setIndex] = useState(null);
-  const getData = () => {
-    fetch(props.boxContent)
-      .then((res) => res.json())
-      .then((out) => {
-        setGallery(out.images);
-        // Push main picture to the array
-        setGallery((current) => [out.main, ...current]);
-      })
-      .catch((err) => console.error(err));
-  };
 
-  useEffect(() => {
-    getData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Loaded states - show lightbox div / section only when main image finished loading
+  const [loaded, setLoaded] = useState(false);
 
   const thumbHandler = (item, index) => {
     setIndex(index);
@@ -42,14 +28,15 @@ function LightBoxHandlerComponent(props) {
   let replaceImg = document.getElementById("main-pic");
 
   return (
-    <div className="lightbox-container">
+    <div className={loaded ? "lightbox-container" : "hide-lightbox-container"}>
       <div className="main-wrapper">
         <img
           id="main-pic"
           className={props.mainPictureStyle}
-          src={gallery[0]}
+          src={props.content[0]}
           onClick={() => setOpen(true)}
           alt="main-pic"
+          onLoad={() => setLoaded(true)}
         />
       </div>
 
@@ -61,7 +48,7 @@ function LightBoxHandlerComponent(props) {
           open={open}
           index={currIndex}
           close={() => setOpen(false)}
-          slides={gallery?.map((item, index) => ({ src: item }))}
+          slides={props.content?.map((item, index) => ({ src: item }))}
           on={{
             click: () => {
               (thumbnailsRef.current?.visible
@@ -95,7 +82,7 @@ function LightBoxHandlerComponent(props) {
             </button>
           </div>
           <div className="thumbnails-content">
-            {gallery?.map((item, index) => (
+            {props.content?.map((item, index) => (
               <img
                 id={"thumbnail" + index}
                 className={props.thumbnailStyle}

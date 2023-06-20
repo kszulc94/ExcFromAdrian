@@ -67,6 +67,10 @@ $slider: none;
   display: flex;
 }
 
+.hide-lightbox-container {
+  display: none;
+}
+
 .lightbox-container img {
   cursor: pointer;
 }
