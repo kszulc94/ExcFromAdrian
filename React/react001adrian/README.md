@@ -1,4 +1,8 @@
 React Excercise
+- UPDATE (17.07.2023)
+a) Implemented Loader spinner for Product page - purpose is to wait until page data is loaded
+b) Improved on page gallery in Product page - scrolling is improved, enabled scrolling by thumbnails, added buttons disabled-enabled functionality,
+current image is highlighted and scrolled
 - UPDATE (20.06.2023)
 a) Move gallery array from LightBoxHandlerComponent.jsx to Product.jsx - pass gallery array as a prop to LightBoxHandlerComponent - more universal
 b) Added checking for image loading in LightBoxHandlerComponent - content appears when the main image is loaded

@@ -4,6 +4,7 @@ import "./product.scss";
 import { useLocation } from "react-router";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LightBoxHandlerComponent from "../lightbox/LightBoxHandlerComponent";
+import Loader from "../loader/Loader";
 function Product() {
   // Fetch sku from URL
   const query = new URLSearchParams(useLocation().search);
@@ -12,8 +13,10 @@ function Product() {
   const jsonURL = process.env.REACT_APP_PRODUCT_DETAILS + sku + ".json";
   // Implement React useState and useEffect to fetch and map data from JSON properly/easily (creating hook to get the data in return section)
   const [data, setData] = useState([]);
-// Gallery array for lightbox handler
+  // Gallery array for lightbox handler
   const [gallery, setGallery] = useState([]);
+
+  let [loading, setLoading] = useState(true);
 
   const getData = () => {
     fetch(jsonURL)
@@ -23,6 +26,9 @@ function Product() {
         setGallery(out.images);
         // Push main picture to the array
         setGallery((current) => [out.main, ...current]);
+        setTimeout(() => {
+          setLoading(!loading);
+        }, 800);
       })
       .catch((err) => console.error(err));
   };
@@ -31,6 +37,9 @@ function Product() {
     getData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (loading) {
+    return <Loader loading={true}></Loader>;
+  }
   return (
     <Container className="main-container main-column">
       <Row xs={1} lg={2}>

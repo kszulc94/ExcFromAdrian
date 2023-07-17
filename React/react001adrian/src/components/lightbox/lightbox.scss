@@ -36,11 +36,20 @@ $slider: none;
   scroll-behavior: smooth;
   -ms-overflow-style: $slider;
   scrollbar-width: $slider;
-  width: 70%;
+  width: 73%;
 }
 
 .thumbnail-carousel::-webkit-scrollbar {
   display: $slider; /* for Chrome, Safari, and Opera */
+}
+
+.active-pic {
+  opacity: 0.6;
+  border: 1px solid black;
+  border-radius: 4px;
+  // border: 1px solid red;
+
+
 }
 
 .previous-btn,
@@ -57,6 +66,10 @@ $slider: none;
   right: 1rem;
 }
 
+.btn-hidden {
+  visibility: hidden !important;
+}
+
 #prevBtn,
 #nextBtn {
   all: unset;
@@ -67,6 +80,10 @@ $slider: none;
   display: flex;
 }
 
+.btn-disabled {
+  cursor: unset !important;
+  opacity: 40% !important;
+}
 .hide-lightbox-container {
   display: none;
 }

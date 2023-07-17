@@ -9,13 +9,20 @@
   max-height: 80px;
   width: auto;
   height: auto;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 4px;
 }
 
 .product-thumb:hover {
   opacity: 0.6;
   transition: 0.2s;
+}
+
+.product-thumb:focus {
+  border: 2px solid red;
 }
 
 .detail-col {
