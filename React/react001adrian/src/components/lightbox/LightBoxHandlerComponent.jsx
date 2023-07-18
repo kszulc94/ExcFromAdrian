@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./lightbox.scss";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -8,9 +8,9 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 
 function LightBoxHandlerComponent(props) {
-  let scrollStep = 140; //Defined thumbnail width + padding
+  // States/parameters for on-page gallery and Lightbox library - yet-another-react-lightbox
+  const [scrollStep, setScrollStep] = useState(0);
 
-  // States/parameters for Lightbox library - yet-another-react-lightbox
   const [open, setOpen] = useState(false);
 
   const thumbnailsRef = React.useRef(null);
@@ -27,18 +27,44 @@ function LightBoxHandlerComponent(props) {
 
   // ************Hooks to DOM elements**************
   const thumbnailContainer = document.querySelector(".thumbnail-carousel");
-
+  
   const prevButton = document.getElementById("prevBtn");
 
   const nextButton = document.getElementById("nextBtn");
 
   const replaceImg = document.getElementById("main-pic");
+
   // ************End of Hooks to DOM elements**************
+
+  useEffect(() => {
+      scrollStepFunction();    
+  }, [loaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ************Functions**************
   const disableLeftButton = () => {
     setLeftDisabled(true);
     prevButton.classList.add("btn-disabled");
+  };
+
+  const scrollStepFunction =  () => {
+    setScrollStep(
+      document.getElementById("thumbnail" + (props.content.length -1))
+        .clientWidth +
+        parseInt(
+          window
+            .getComputedStyle(
+              document.getElementById("thumbnail" + (props.content.length -1))
+            )
+            .marginLeft.substring(0, 2)
+        ) +
+        parseInt(
+          window
+            .getComputedStyle(
+              document.getElementById("thumbnail" + (props.content.length -1))
+            )
+            .marginRight.substring(0, 2)
+            )
+            );
   };
 
   const enableLeftButton = () => {
@@ -106,13 +132,14 @@ function LightBoxHandlerComponent(props) {
       }
     }
 
-    thumbnailContainer.scrollLeft = scrollStep * (index - 1);
+    // ScrollLeft calculation to make active item be present in center
+    thumbnailContainer.scrollLeft =
+      scrollStep * (index - 1) -
+      (thumbnailContainer.clientWidth - 3 * scrollStep) / 2;
 
     if (index > 1) {
       enableLeftButton();
-    }
-
-    if (index <= 1) {
+    } else {
       disableLeftButton();
     }
 
@@ -128,6 +155,7 @@ function LightBoxHandlerComponent(props) {
 
   return (
     <div className={loaded ? "lightbox-container" : "hide-lightbox-container"}>
+
       <div className="main-wrapper">
         <img
           id="main-pic"
@@ -135,7 +163,6 @@ function LightBoxHandlerComponent(props) {
           src={props.content[0]}
           onClick={() => setOpen(true)}
           alt="main-pic"
-          onLoad={() => setLoaded(true)}
         />
       </div>
 
@@ -195,11 +222,14 @@ function LightBoxHandlerComponent(props) {
                 }
                 src={item}
                 onClick={() => thumbHandler(item, index)}
+                onLoad={() => index ===props.content.length -1 ? setLoaded(true) : undefined} //Workaround for Firefox - was firing useEffect before it could get thumbnail element, Chrome/Edge was fine
                 alt="THUMB"
                 key={index}
               />
-            ))}
+            ))
+            }
           </div>
+            
         </div>
       </div>
     </div>

@@ -5,7 +5,9 @@ import { useLocation } from "react-router";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LightBoxHandlerComponent from "../lightbox/LightBoxHandlerComponent";
 import Loader from "../loader/Loader";
+import { useTranslation } from "react-i18next";
 function Product() {
+  const {t} = useTranslation();
   // Fetch sku from URL
   const query = new URLSearchParams(useLocation().search);
   const sku = query.get("sku");
@@ -54,7 +56,7 @@ function Product() {
         <Col className="detail-col">
           <p id="product-title">{data.title}</p>
           <p id="sku">
-            <b>Indeks: </b>
+            <b>{t('productPage.index')}</b>
             {data.sku}
           </p>
           <p>{data.description}</p>
@@ -68,7 +70,7 @@ function Product() {
                 {Math.round(data.money?.value * 0.77 * 100) / 100 +
                   " " +
                   data.money?.currency +
-                  " net"}
+                  t('productPage.gross')}
               </p>
             </div>
 
@@ -82,7 +84,7 @@ function Product() {
               defaultValue={1}
             ></input>
             <button className="btn btn-success lower-button" type="submit">
-              <i className="bi bi-cart"></i> Add to Cart
+              <i className="bi bi-cart"></i> {t('productPage.addToCart')}
             </button>
           </div>
         </Col>

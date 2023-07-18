@@ -1,7 +1,9 @@
 import { Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./cardComponent.scss";
+import { useTranslation } from "react-i18next";
 function CardComponent(props) {
+  const {t} = useTranslation();
   return (
     <Card className="card-custom h-100 no-border-radius">
       <div className="image-container">
@@ -27,7 +29,7 @@ function CardComponent(props) {
               <li id="product-details-btn">
                 <Link to={"product?sku=" + props.cardItem.sku}>
                   <button className="btn btn-primary btn-sm py-0 px-1 btn-sm-font">
-                    Details
+                    {t('card.details')}
                   </button>
                 </Link>
               </li>

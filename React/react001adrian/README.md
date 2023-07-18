@@ -1,4 +1,7 @@
 React Excercise
+- UPDATE (18.07.2023)
+a) Added i18n translations for basic and static HTML texts; supported English and Polish; modified Heading/Navbar labels
+b) Gallery fix - implemented calculation for active image placement in thumbnail slider - now it's always in the center
 - UPDATE (17.07.2023)
 a) Implemented Loader spinner for Product page - purpose is to wait until page data is loaded
 b) Improved on page gallery in Product page - scrolling is improved, enabled scrolling by thumbnails, added buttons disabled-enabled functionality,
