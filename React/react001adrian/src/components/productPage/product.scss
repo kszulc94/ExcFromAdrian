@@ -1,7 +1,16 @@
+.main-product-wrapper {
+  display: none;
+}
+
 .productImage {
   width: 100%;
   padding-top: 16px !important;
 }
+
+#desc {
+  text-align: justify;
+}
+
 .product-thumb {
   display: inline;
   margin-top: 10px;
@@ -71,7 +80,7 @@
 }
 
 .price-section #main-price {
-  padding-top: 1.5rem;
+  padding: 2rem 0;
   margin-bottom: 0;
   font-size: 2rem;
   font-weight: 600;

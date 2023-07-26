@@ -7,7 +7,7 @@ import LightBoxHandlerComponent from "../lightbox/LightBoxHandlerComponent";
 import Loader from "../loader/Loader";
 import { useTranslation } from "react-i18next";
 function Product() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   // Fetch sku from URL
   const query = new URLSearchParams(useLocation().search);
   const sku = query.get("sku");
@@ -28,68 +28,68 @@ function Product() {
         setGallery(out.images);
         // Push main picture to the array
         setGallery((current) => [out.main, ...current]);
-        setTimeout(() => {
-          setLoading(!loading);
-        }, 800);
       })
       .catch((err) => console.error(err));
   };
 
   useEffect(() => {
     getData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (loading) {
-    return <Loader loading={true}></Loader>;
-  }
   return (
-    <Container className="main-container main-column">
-      <Row xs={1} lg={2}>
-        <Col className=" center-images">
-          <LightBoxHandlerComponent
-            content={gallery}
-            mainPictureStyle="product-main-picture"
-            thumbnailStyle="product-thumb"
-          />
-        </Col>
+    <>
+      {loading ? <Loader loading={true}></Loader> : undefined}
+      <div className={loading ? "main-product-wrapper" : ""}>
+        <Container className="main-container main-column">
+          <Row xs={1} lg={2}>
+            <Col className=" center-images">
+              <LightBoxHandlerComponent
+                content={gallery}
+                mainPictureStyle="product-main-picture"
+                thumbnailStyle="product-thumb"
+                onLoadingChange={setLoading}
+              />
+            </Col>
 
-        <Col className="detail-col">
-          <p id="product-title">{data.title}</p>
-          <p id="sku">
-            <b>{t('productPage.index')}</b>
-            {data.sku}
-          </p>
-          <p>{data.description}</p>
-
-          <div className="shop-box">
-            <div className="price-section">
-              <p id="main-price">
-                {data.money?.value + " " + data.money?.currency}
+            <Col className="detail-col">
+              <p id="product-title">{data.title}</p>
+              <p id="sku">
+                <b>{t("productPage.index")}</b>
+                {data.sku}
               </p>
-              <p id="net-price">
+              <p id="desc">{data.description}</p>
+
+              <div className="shop-box">
+                <div className="price-section">
+                  <p id="main-price">
+                    {data.money?.value + " " + data.money?.currency}
+                  </p>
+                  {/* <p id="net-price">
                 {Math.round(data.money?.value * 0.77 * 100) / 100 +
                   " " +
                   data.money?.currency +
                   t('productPage.gross')}
-              </p>
-            </div>
+              </p> */}
+                </div>
 
-            <input
-              type="number"
-              min="1"
-              max="999"
-              step="1"
-              name="quantity"
-              id="product-quantity"
-              defaultValue={1}
-            ></input>
-            <button className="btn btn-success lower-button" type="submit">
-              <i className="bi bi-cart"></i> {t('productPage.addToCart')}
-            </button>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+                <input
+                  type="number"
+                  min="1"
+                  max="999"
+                  step="1"
+                  name="quantity"
+                  id="product-quantity"
+                  defaultValue={1}
+                ></input>
+                <button className="btn btn-success lower-button" type="submit">
+                  <i className="bi bi-cart"></i> {t("productPage.addToCart")}
+                </button>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </>
   );
 }
 export default Product;

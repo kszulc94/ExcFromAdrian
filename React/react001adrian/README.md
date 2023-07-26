@@ -1,4 +1,10 @@
 React Excercise
+-UPDATE (26.07.2023)
+a) Modified LightBoxHandlerComponent - removed "document" reference and used React's useRef to make component usable multiple times/in different scenarios - different approach in script.
+b) Improved gallery - buttons behavior fix, scroll method change
+c) Improved Loader behavior - now it waits until images from gallery are fully loaded as well
+d) Description text aligning :)
+e) Commented-out net price
 - UPDATE (18.07.2023)
 a) Added i18n translations for basic and static HTML texts; supported English and Polish; modified Heading/Navbar labels
 b) Gallery fix - implemented calculation for active image placement in thumbnail slider - now it's always in the center

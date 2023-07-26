@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./lightbox.scss";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -9,11 +9,10 @@ import "yet-another-react-lightbox/styles.css";
 
 function LightBoxHandlerComponent(props) {
   // States/parameters for on-page gallery and Lightbox library - yet-another-react-lightbox
+
   const [scrollStep, setScrollStep] = useState(0);
 
   const [open, setOpen] = useState(false);
-
-  const thumbnailsRef = React.useRef(null);
 
   const [currIndex, setIndex] = useState(null);
 
@@ -25,138 +24,159 @@ function LightBoxHandlerComponent(props) {
   const [rightDisabled, setRightDisabled] = useState(false);
   // ************End of States/Triggers section**************
 
-  // ************Hooks to DOM elements**************
-  const thumbnailContainer = document.querySelector(".thumbnail-carousel");
-  
-  const prevButton = document.getElementById("prevBtn");
+  // ************Hooks/References to DOM elements**************
+  const mainPicRef = useRef(null);
 
-  const nextButton = document.getElementById("nextBtn");
+  const prevButtonRef = useRef(null);
 
-  const replaceImg = document.getElementById("main-pic");
+  const nextButtonRef = useRef(null);
 
-  // ************End of Hooks to DOM elements**************
+  const galleryThumbnailsRef = useRef(null);
+
+  const thumbnailsRef = React.useRef(null);
+  // ************End of Hooks/References to DOM elements**************
 
   useEffect(() => {
-      scrollStepFunction();    
+    scrollStepFunction();
   }, [loaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ************Functions**************
+
   const disableLeftButton = () => {
     setLeftDisabled(true);
-    prevButton.classList.add("btn-disabled");
+    prevButtonRef.current.classList.add("btn-disabled");
   };
 
-  const scrollStepFunction =  () => {
-    setScrollStep(
-      document.getElementById("thumbnail" + (props.content.length -1))
-        .clientWidth +
-        parseInt(
-          window
-            .getComputedStyle(
-              document.getElementById("thumbnail" + (props.content.length -1))
-            )
-            .marginLeft.substring(0, 2)
-        ) +
-        parseInt(
-          window
-            .getComputedStyle(
-              document.getElementById("thumbnail" + (props.content.length -1))
-            )
-            .marginRight.substring(0, 2)
-            )
-            );
+  const scrollStepFunction = () => {
+    if (loaded) {
+      const imagesNode = galleryThumbnailsRef.current;
+
+      const thumbnail = imagesNode.querySelectorAll("img");
+      setScrollStep(
+        thumbnail[thumbnail.length - 1].clientWidth +
+          parseInt(
+            window
+              .getComputedStyle(thumbnail[thumbnail.length - 1])
+              .marginLeft.substring(0, 2)
+          ) +
+          parseInt(
+            window
+              .getComputedStyle(thumbnail[thumbnail.length - 1])
+              .marginRight.substring(0, 2)
+          )
+      );
+    }
   };
 
   const enableLeftButton = () => {
     setLeftDisabled(false);
-    prevButton.classList.remove("btn-disabled");
+    prevButtonRef.current.classList.remove("btn-disabled");
   };
 
   const disableRightButton = () => {
     setRightDisabled(true);
-    nextButton.classList.add("btn-disabled");
+    nextButtonRef.current.classList.add("btn-disabled");
   };
 
   const enableRightButton = () => {
     setRightDisabled(false);
-    nextButton.classList.remove("btn-disabled");
+    nextButtonRef.current.classList.remove("btn-disabled");
   };
 
   const scrollLeft = () => {
-    thumbnailContainer.scrollLeft -= scrollStep;
+    galleryThumbnailsRef.current.scrollLeft -= scrollStep;
 
     if (rightDisabled) {
       enableRightButton();
     }
-    if (thumbnailContainer.scrollLeft <= scrollStep) {
+    if (galleryThumbnailsRef.current.scrollLeft <= scrollStep) {
       disableLeftButton();
 
       setTimeout(() => {
-        thumbnailContainer.scrollLeft -= scrollStep;
+        galleryThumbnailsRef.current.scrollLeft -= scrollStep;
       }, 0);
     }
   };
 
   const scrollRight = () => {
-    thumbnailContainer.scrollLeft += scrollStep;
+    galleryThumbnailsRef.current.scrollLeft += scrollStep;
     if (leftDisabled) {
       enableLeftButton();
     }
     if (
-      thumbnailContainer.scrollLeft + thumbnailContainer.offsetWidth >=
-      thumbnailContainer.scrollWidth - scrollStep
+      galleryThumbnailsRef.current.scrollLeft +
+        galleryThumbnailsRef.current.offsetWidth >=
+      galleryThumbnailsRef.current.scrollWidth - scrollStep
     ) {
       disableRightButton();
       setTimeout(() => {
-        thumbnailContainer.scrollLeft += scrollStep;
+        galleryThumbnailsRef.current.scrollLeft += scrollStep;
       }, 0);
     }
   };
 
   const hideButtons = () => {
-    nextButton?.classList.add("btn-hidden");
-    prevButton?.classList.add("btn-hidden");
+    if (loaded) {
+      nextButtonRef.current.classList.add("btn-hidden");
+      prevButtonRef.current.classList.add("btn-hidden");
+    }
   };
 
-  const thumbHandler = (item, index) => {
+  const thumbnailsHandler = (index) => {
     setIndex(index);
-    replaceImg.src = item;
+    const thumbnailsNode = galleryThumbnailsRef.current;
+
+    const mainPicNode = mainPicRef.current;
+
+    const mainImg = mainPicNode.querySelectorAll("img")[0];
+
+    const currentThumbnail = thumbnailsNode.querySelectorAll("img")[index];
+
+    currentThumbnail.classList.add("active-pic");
+
+    mainImg.src = currentThumbnail.src;
 
     for (let i = 0; i < props.content.length; i++) {
-      let currentImage = document.getElementById("thumbnail" + index);
-
-      currentImage.classList.add("active-pic");
-
+      let removeActive = thumbnailsNode.querySelectorAll("img")[i];
       if (i !== index) {
-        document.getElementById("thumbnail" + i).classList.remove("active-pic");
+        removeActive.classList.remove("active-pic");
       }
     }
+    currentThumbnail.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
 
-    // ScrollLeft calculation to make active item be present in center
-    thumbnailContainer.scrollLeft =
-      scrollStep * (index - 1) -
-      (thumbnailContainer.clientWidth - 3 * scrollStep) / 2;
-
-    if (index > 1) {
+    if (thumbnailsNode.clientWidth < scrollStep * 3 * index || index > 1) {
       enableLeftButton();
     } else {
       disableLeftButton();
     }
 
-    if (index === props.content.length - 1) {
-      disableRightButton();
-    } else if (
-      thumbnailContainer.scrollLeft + thumbnailContainer.offsetWidth <=
-      thumbnailContainer.scrollWidth
+    // Compensation set to 20 as below, as it impacts {only} one window size. Equal value is 11 (1 px + no margin [10px] from right side in the last thumbnail), but gave some additional px.
+    if (
+      scrollStep * (index - 1) + 20 >=
+        thumbnailsNode.scrollWidth - thumbnailsNode.clientWidth ||
+      index === props.content.length - 1
     ) {
+      disableRightButton();
+    } else {
       enableRightButton();
     }
   };
 
-  return (
-    <div className={loaded ? "lightbox-container" : "hide-lightbox-container"}>
+  const setCompleteLoadState = () => {
+    setTimeout(() => {
+      props.onLoadingChange(false);
+      setLoaded(true);
+    }, 800);
+  };
 
-      <div className="main-wrapper">
+  return (
+    // <div className={loaded ? "lightbox-container" : "hide-lightbox-container"}>
+    <div className="lightbox-container">
+      <div className="main-wrapper" ref={mainPicRef}>
         <img
           id="main-pic"
           className={props.mainPictureStyle}
@@ -166,27 +186,25 @@ function LightBoxHandlerComponent(props) {
         />
       </div>
 
-      <>
-        <Lightbox
-          plugins={[Thumbnails, Counter]}
-          thumbnails={{ ref: thumbnailsRef, position: "bottom" }}
-          counter={{ container: { style: { top: 0 } } }}
-          open={open}
-          index={currIndex}
-          close={() => setOpen(false)}
-          slides={props.content?.map((item, index) => ({ src: item }))}
-          on={{
-            click: () => {
-              (thumbnailsRef.current?.visible
-                ? thumbnailsRef.current?.hide
-                : thumbnailsRef.current?.show)?.();
-            },
-          }}
-        />
-      </>
+      <Lightbox
+        plugins={[Thumbnails, Counter]}
+        thumbnails={{ ref: thumbnailsRef, position: "bottom" }}
+        counter={{ container: { style: { top: 0 } } }}
+        open={open}
+        index={currIndex}
+        close={() => setOpen(false)}
+        slides={props.content?.map((item, index) => ({ src: item }))}
+        on={{
+          click: () => {
+            (thumbnailsRef.current?.visible
+              ? thumbnailsRef.current?.hide
+              : thumbnailsRef.current?.show)?.();
+          },
+        }}
+      />
 
       <div className="thumbnail-wrapper">
-        <div className="thumbnail-carousel">
+        <div className="thumbnail-carousel" ref={galleryThumbnailsRef}>
           <div className="previous-btn ">
             <button
               id="prevBtn"
@@ -195,6 +213,7 @@ function LightBoxHandlerComponent(props) {
                 scrollLeft();
               }}
               disabled={leftDisabled}
+              ref={prevButtonRef}
             >
               <div className="arrow-left"></div>
             </button>
@@ -206,6 +225,7 @@ function LightBoxHandlerComponent(props) {
                 scrollRight();
               }}
               disabled={rightDisabled}
+              ref={nextButtonRef}
             >
               <div className="arrow-right"></div>
             </button>
@@ -221,15 +241,18 @@ function LightBoxHandlerComponent(props) {
                     : props.thumbnailStyle
                 }
                 src={item}
-                onClick={() => thumbHandler(item, index)}
-                onLoad={() => index ===props.content.length -1 ? setLoaded(true) : undefined} //Workaround for Firefox - was firing useEffect before it could get thumbnail element, Chrome/Edge was fine
+                onClick={() => thumbnailsHandler(index)}
+                onLoad={() =>
+                  index === props.content.length - 1
+                    ? setCompleteLoadState()
+                    : undefined
+                }
+                //Workaround for Firefox - was firing useEffect before it could get thumbnail element, Chrome/Edge was fine
                 alt="THUMB"
                 key={index}
               />
-            ))
-            }
+            ))}
           </div>
-            
         </div>
       </div>
     </div>
