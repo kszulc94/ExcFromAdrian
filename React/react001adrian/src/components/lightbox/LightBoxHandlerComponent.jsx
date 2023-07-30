@@ -40,7 +40,20 @@ function LightBoxHandlerComponent(props) {
     scrollStepFunction();
   }, [loaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if(open){
+      document.addEventListener("keydown", escFunction, false);
+    } 
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
   // ************Functions**************
+  
+  function escFunction(e){
+    if (open && e.key === "Escape") {
+      setOpen(false);
+      document.removeEventListener("keydown", escFunction, false);
+    }
+
+  }
 
   const disableLeftButton = () => {
     setLeftDisabled(true);
@@ -173,6 +186,11 @@ function LightBoxHandlerComponent(props) {
     }, 800);
   };
 
+  const closeLightbox = () => {
+    setOpen(false);
+    document.removeEventListener("keydown", escFunction, false);
+  }
+  
   return (
     // <div className={loaded ? "lightbox-container" : "hide-lightbox-container"}>
     <div className="lightbox-container">
@@ -192,7 +210,7 @@ function LightBoxHandlerComponent(props) {
         counter={{ container: { style: { top: 0 } } }}
         open={open}
         index={currIndex}
-        close={() => setOpen(false)}
+        close={() => closeLightbox()}
         slides={props.content?.map((item, index) => ({ src: item }))}
         on={{
           click: () => {
