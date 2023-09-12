@@ -1,4 +1,11 @@
 React Excercise
+-UPDATE (12.08.2023)
+a) Added functional shopping cart - new components, context
+b) Translations update
+c) Created new directories (context, pages) and organised files
+d) Added sorting function on main product list page (called 'Home' currently)
+e) Added filter button and popup (doesn't function yet)
+f) General appearance tweaks (i.e. only 3 products in a row in products list / Home) and code cleaning
 -UPDATE (26.07.2023)
 a) Modified LightBoxHandlerComponent - removed "document" reference and used React's useRef to make component usable multiple times/in different scenarios - different approach in script.
 b) Improved gallery - buttons behavior fix, scroll method change
