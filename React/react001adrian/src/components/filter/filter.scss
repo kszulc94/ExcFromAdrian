@@ -1,0 +1,19 @@
+.filter-btn-confirm {
+    margin-top: 0.5rem;
+}
+
+// Hide arrows in form control
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+/* Works for Firefox */
+input[type="number"] {
+-moz-appearance: textfield;
+}
+
+[role='tooltip'].popup-content {
+    width: 300px !important;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+  }
