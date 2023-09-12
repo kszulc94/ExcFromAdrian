@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/home/Home";
-import Product from "./components/productPage/Product";
+import Home from "./pages/home/Home";
+import Product from "./pages/productPage/Product";
 function App() {
   
   return (
+
 
     <BrowserRouter>
       <Routes>
@@ -11,6 +12,7 @@ function App() {
         <Route path="/product" element={<Product />}></Route>
       </Routes>
     </BrowserRouter>
+
   );
 }
 export default App;

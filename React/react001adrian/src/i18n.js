@@ -33,11 +33,33 @@ i18n
             card: {
                 details: "Details"
             },
+            cart: {
+              cartTitle: "Cart",
+              emptyCart: "Cart is empty",
+              cartTotal: "Total: ",
+              next: "Next"
+            },
+            filter: {
+              title: "Filter",
+              max: "Max Price:",
+              min: "Min Price"
+            },
             productPage: {
                 addToCart: "Add to Cart",
                 gross: " net",
-                index: "Index: "
+                index: "Index: ",
+                inCart: " in cart",
+                remove: "Remove"
+            },
+            homePage: {
+              sortBtn: {
+                btnTitle: "Sort By",
+                sortFromLowest: "Price: Lowest First",
+                sortFromHighest: "Price: Highest First",
+                sortAlphabetical: "Name: A-Z"
+              }
             }
+            
         }
       },
       pl: {
@@ -56,10 +78,31 @@ i18n
             card: {
                 details: "Więcej"
             },
+            cart: {
+              cartTitle: "Koszyk",
+              emptyCart: "Koszyk jest pusty",
+              cartTotal: "Suma: ",
+              next: "Przejdź dalej"
+            },
+            filter: {
+              title: "Filtruj",
+              max: "Cena maksymalna:",
+              min: "Cena minimalna:"
+            },
             productPage: {
                 addToCart: "Dodaj do koszyka",
                 gross: " netto",
-                index: "Indeks: "
+                index: "Indeks: ",
+                inCart: " w koszyku",
+                remove: "Usuń"
+            },
+            homePage: {
+              sortBtn: {
+                btnTitle: "Sortuj",
+                sortFromLowest: "Cena: od najnizszej",
+                sortFromHighest: "Cena: od najwyzszej",
+                sortAlphabetical: "Nazwa: A-Z"
+              }
             }
         }
       }

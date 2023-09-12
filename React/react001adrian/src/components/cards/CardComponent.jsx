@@ -20,7 +20,7 @@ function CardComponent(props) {
 
         <Row xs={2} md={2}>
           <Col className="price-position">
-            <div className="price">
+            <div className="price text-muted">
               {props.cardItem.money.value + " " + props.cardItem.money.currency}
             </div>
           </Col>

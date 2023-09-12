@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { CartContext } from "../../context/Cart";
-import "./productPageCartManagement.scss";
+import "./cartManagement.scss";
 
-function ProductPageCartManagement(props) {
+function CartManagement(props) {
   const { cartItems, addToCart, removeFromCart, removeEntireProductFromCart } =
     useContext(CartContext);
 
@@ -64,4 +64,4 @@ function ProductPageCartManagement(props) {
     </>
   );
 }
-export default ProductPageCartManagement;
+export default CartManagement;

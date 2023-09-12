@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import LightBoxHandlerComponent from "../../components/lightbox/LightBoxHandlerComponent";
 import Loader from "../../components/loader/Loader";
-import ProductPageCartManagement from "../../components/cart/ProductPageCartManagement";
+import CartManagement from "../../components/cart/CartManagement";
 import ShoppingCart from "../../components/cart/ShoppingCart";
 import "./product.scss";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -67,7 +67,7 @@ function Product() {
                     {data.money?.value + " " + data.money?.currency}
                   </p>
                 </div>
-                <ProductPageCartManagement product={data} />
+                <CartManagement product={data} />
               </div>
             </Col>
           </Row>
